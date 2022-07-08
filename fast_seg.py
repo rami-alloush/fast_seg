@@ -18,6 +18,7 @@
 	 along with Fast_seg.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
+import os
 import sys, getopt
 import cv2
 import numpy as np
@@ -247,6 +248,7 @@ def main():
 		elif opt in ("-i", "--input-image"):
 			inputfile = arg
 	print('Using image: ', inputfile)
+	print('Use o (foreground) and b (background) to switch mode')
 
 	I=cv2.imread(inputfile) #imread wont rise exceptions by default
 	I_dummy=np.zeros(I.shape)
@@ -368,9 +370,17 @@ def main():
 	plt.axis("off")
 	plt.xlabel("Output Image")
 
+    # Save final image
+	output_path = os.path.join(os.getcwd(),"output",os.path.basename(inputfile))
+	print(output_path)
+	cv2.imwrite(output_path,Final)
 
-	
-	cv2.imwrite("out.png",Final)
+    # Save mask
+	output_mask_path = os.path.join(os.getcwd(),"output_mask",os.path.basename(inputfile))
+	img_white = np.zeros(I.shape,dtype=np.uint8)
+	img_white.fill(255)
+	cv2.imwrite(output_mask_path,cv2.bitwise_and(img_white,img_white,mask = F))
+
 	plt.show()
 
 if __name__ == '__main__':
