@@ -371,12 +371,15 @@ def main():
 	plt.xlabel("Output Image")
 
     # Save final image
-	output_path = os.path.join(os.getcwd(),"output",os.path.basename(inputfile))
+	file_name = os.path.basename(inputfile).split('.')[0]
+	ext = os.path.basename(inputfile).split('.')[1]
+	print(file_name, ext)
+	output_path = os.path.join(os.getcwd(),"output",file_name + "_seg." + ext)
 	print(output_path)
 	cv2.imwrite(output_path,Final)
 
     # Save mask
-	output_mask_path = os.path.join(os.getcwd(),"output_mask",os.path.basename(inputfile))
+	output_mask_path = os.path.join(os.getcwd(),"output_mask",file_name + "_seg." + ext)
 	img_white = np.zeros(I.shape,dtype=np.uint8)
 	img_white.fill(255)
 	cv2.imwrite(output_mask_path,cv2.bitwise_and(img_white,img_white,mask = F))
